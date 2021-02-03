@@ -18,6 +18,8 @@ import android.os.IBinder;
 import android.os.Process;
 import android.util.Log;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,6 +34,7 @@ public class RecordService extends Service {
     private MediaProjection mediaProjection;
     private VirtualDisplay virtualDisplay;
     private ImageReader mImageReader;
+    private AutoServiceHelper helper;
 
     private boolean running;
     private int width = 720;
@@ -57,6 +60,7 @@ public class RecordService extends Service {
         HandlerThread serviceThread = new HandlerThread("service_thread", Process.THREAD_PRIORITY_BACKGROUND);
         serviceThread.start();
         running = false;
+        helper = new AutoServiceHelper();
     }
 
     public void setMediaProject(MediaProjection project) {
@@ -88,7 +92,7 @@ public class RecordService extends Service {
                     initRecorder(mImageReader);
                 }catch (IllegalStateException argE){
                 }
-               //stopRecord();
+               stopRecord();
                 if( virtualDisplay!=null) {
                     virtualDisplay.release();
                 }
@@ -117,6 +121,27 @@ public class RecordService extends Service {
     private void createVirtualDisplay() {
         virtualDisplay = mediaProjection.createVirtualDisplay("MainScreen", width, height, dpi,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
+    }
+
+    @Nullable
+    private int[] findPixels(Bitmap bitmap)
+    {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        int s = w * h;
+        int currentPix=0;
+        for (int i = (int) (h*0.6); i<h*0.9; i++)
+        {
+            for (int j = (int) (h*0.6); j<w*0.9; j++)
+            {
+                currentPix = bitmap.getPixel(i,j);
+                if (currentPix ==12566335)
+                {
+                    return new int[] {i,j};
+                }
+            }
+        }
+        return null;
     }
 
     private void initRecorder(ImageReader argImageReader) {
@@ -156,18 +181,22 @@ public class RecordService extends Service {
         int w = localBitmap.getWidth();
         int h = localBitmap.getHeight();
         int s = w * h;
-        int[] pixels = new int[s];
-
-        localBitmap.getPixels(pixels, 0, w, 0, 0, w, h);
-        for (int i =0;i<pixels.length;i++)
-        {
-            if (pixels[i] == 12566335)
-            {
-
-                break;
-            }
-        }
+        //int[] pixels = new int[s];
+        //localBitmap.getPixels(pixels, 0, w, 0, 0, w, h);
+//
+//        for (int i =0;i<pixels.length;i++)
+//        {
+//            if (pixels[i] == 12566335)
+//            {
+//
+//                break;
+//            }
+//        }
         localBitmap.createBitmap(localBitmap, 0, 0, width, height);
+        int[] locationClick = findPixels(localBitmap);
+        if (locationClick != null) {
+            helper.click(locationClick[0], locationClick[1]);
+        }
         if (localBitmap != null) {
             File f = new File(nameImage);
             if (f.exists()) {
