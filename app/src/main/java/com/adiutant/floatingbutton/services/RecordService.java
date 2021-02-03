@@ -2,7 +2,9 @@ package com.adiutant.floatingbutton.services;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
@@ -16,6 +18,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Process;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.jetbrains.annotations.Nullable;
@@ -122,21 +125,33 @@ public class RecordService extends Service {
         virtualDisplay = mediaProjection.createVirtualDisplay("MainScreen", width, height, dpi,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
     }
+   // public static int pxToDp(int px) { return (int) (px / Resources.getSystem().getDisplayMetrics().density); }
+   public int pxToDp(int px) { return (int) (px / dpi); }
 
-    @Nullable
+   private boolean neighbors(Bitmap b, int pixel,int[] pixelLocation)
+   {
+       int x = pixelLocation[0];
+       int y = pixelLocation[1];
+       return b.getPixel(x + 1, y) == pixel && b.getPixel(x - 1, y) == pixel && b.getPixel(x, y + 1) == pixel && b.getPixel(x, y - 1) == pixel;
+
+
+   }
+
     private int[] findPixels(Bitmap bitmap)
     {
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
         int s = w * h;
         int currentPix=0;
-        for (int i = (int) (h*0.6); i<h*0.9; i++)
+        for (int i = (int) (w*0.3); i<w*0.9; i++)
         {
-            for (int j = (int) (h*0.6); j<w*0.9; j++)
-            {
+           for (int j = (int) (h*0.3); j<h*0.9; j++) {
                 currentPix = bitmap.getPixel(i,j);
-                if (currentPix ==12566335)
+                if ((Math.abs(currentPix)==16777215)&&neighbors(bitmap,Math.abs(currentPix),new int[] {i,j}))
                 {
+                    System.out.println(i);
+                    System.out.println(j);
+                    System.out.println(currentPix);
                     return new int[] {i,j};
                 }
             }
@@ -146,18 +161,17 @@ public class RecordService extends Service {
 
     private void initRecorder(ImageReader argImageReader) {
 
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
         String strDate = dateFormat.format(new java.util.Date());
         String pathImage = Environment.getExternalStorageDirectory().getPath()+"/Pictures/";
 
-        //检测目录是否存在
-        File localFileDir = new File(pathImage);
-        if(!localFileDir.exists())
-        {
-            localFileDir.mkdirs();
-            Log.d("DaemonService","创建Pictures目录成功");
-        }
+//        //检测目录是否存在
+//        File localFileDir = new File(pathImage);
+//        if(!localFileDir.exists())
+//        {
+//            localFileDir.mkdirs();
+//            Log.d("DaemonService","创建Pictures目录成功");
+//        }
 
         String nameImage = pathImage+strDate+".png";
 
@@ -197,27 +211,27 @@ public class RecordService extends Service {
         if (locationClick != null) {
             helper.click(locationClick[0], locationClick[1]);
         }
-        if (localBitmap != null) {
-            File f = new File(nameImage);
-            if (f.exists()) {
-                f.delete();
-            }
-            try {
-                FileOutputStream out = new FileOutputStream(f);
-                localBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-                out.flush();
-                out.close();
-                Log.d("DaemonService", "startCapture-> 保存文件成功："+nameImage);
-
-
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+//        if (localBitmap != null) {
+//            File f = new File(nameImage);
+//            if (f.exists()) {
+//                f.delete();
+//            }
+//            try {
+//                FileOutputStream out = new FileOutputStream(f);
+//                localBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+//                out.flush();
+//                out.close();
+//                Log.d("DaemonService", "startCapture-> 保存文件成功："+nameImage);
+//
+//
+//            } catch (FileNotFoundException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//        }
 
     }
 

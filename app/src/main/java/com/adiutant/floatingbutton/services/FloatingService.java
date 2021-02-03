@@ -101,8 +101,7 @@ public class FloatingService extends Service {
                 new Function0<Unit>() {
                     @Override
                     public Unit invoke() {
-                       sendMessage(1);
-                        viewOnClick();
+                        startCheck();
                         return null;
                     }
                 },
@@ -118,6 +117,30 @@ public class FloatingService extends Service {
     }
 
     private boolean isOn = false;
+
+
+    private void startCheck()
+    {
+        if (isOn) {
+            timer.cancel();
+        } else {
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    sendMessage(1);
+                }
+            },0,2000);
+        }
+        isOn = !isOn;
+        if (isOn) {
+            click.setText("ON");
+        }
+        else
+        {
+            click.setText("OFF");
+        }
+    }
 
     @SuppressLint("SetTextI18n")
     private void viewOnClick() {
