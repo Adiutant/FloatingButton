@@ -147,7 +147,9 @@ public class RecordService extends Service {
         {
            for (int j = (int) (h*0.3); j<h*0.9; j++) {
                 currentPix = bitmap.getPixel(i,j);
-                if ((Math.abs(currentPix)==16777215)&&neighbors(bitmap,Math.abs(currentPix),new int[] {i,j}))
+                if ((Math.abs(currentPix)<5148286+10000&&Math.abs(currentPix)>5148286-10000)
+                //        &&neighbors(bitmap,Math.abs(currentPix),new int[] {i,j})
+                )
                 {
                     System.out.println(i);
                     System.out.println(j);
@@ -207,9 +209,16 @@ public class RecordService extends Service {
 //            }
 //        }
         localBitmap.createBitmap(localBitmap, 0, 0, width, height);
-        int[] locationClick = findPixels(localBitmap);
+        final int[] locationClick = findPixels(localBitmap);
         if (locationClick != null) {
-            helper.click(locationClick[0], locationClick[1]);
+            new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            helper.click(locationClick[0], locationClick[1]);
+                        }
+                    }).start();
+
         }
 //        if (localBitmap != null) {
 //            File f = new File(nameImage);
