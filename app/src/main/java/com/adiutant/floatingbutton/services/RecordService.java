@@ -143,11 +143,11 @@ public class RecordService extends Service {
         int h = bitmap.getHeight();
         int s = w * h;
         int currentPix=0;
-        for (int i = (int) (w*0.3); i<w*0.9; i++)
+        for (int i = (int) (w*0.6); i<w*0.9; i++)
         {
-           for (int j = (int) (h*0.3); j<h*0.9; j++) {
+           for (int j = (int) (h*0.5); j<h*0.86; j++) {
                 currentPix = bitmap.getPixel(i,j);
-                if ((Math.abs(currentPix)<5148286+10000&&Math.abs(currentPix)>5148286-10000)
+                if ((Math.abs(currentPix)<11769141+1000&&Math.abs(currentPix)>11769141-1000)
                 //        &&neighbors(bitmap,Math.abs(currentPix),new int[] {i,j})
                 )
                 {

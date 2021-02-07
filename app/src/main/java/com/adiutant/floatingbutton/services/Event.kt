@@ -9,8 +9,8 @@ import android.graphics.Point
  * By nesto
  */
 abstract class Event {
-    var startTime = 10L
-    var duration = 10L
+    var startTime = 100L
+    var duration = 100L
     lateinit var path: Path
     fun onEvent(): GestureDescription.StrokeDescription {
         path = Path()
