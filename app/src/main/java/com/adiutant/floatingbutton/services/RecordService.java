@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -136,6 +137,20 @@ public class RecordService extends Service {
 
 
    }
+   private boolean testBronze(int curPix)
+   {
+       int redPix = Color.red(curPix);
+       int greenPix = Color.green(curPix);
+       int bluePix = Color.blue(curPix);
+       return redPix> 120&&greenPix>50&&greenPix<80&&bluePix>20&&bluePix<60;
+   }
+    private boolean goldChect(int curPix)
+    {
+        int redPix = Color.red(curPix);
+        int greenPix = Color.green(curPix);
+        int bluePix = Color.blue(curPix);
+        return redPix< 50&&greenPix>120&&greenPix<150&&bluePix>120&&bluePix<160;
+    }
 
     private int[] findPixels(Bitmap bitmap)
     {
@@ -143,13 +158,16 @@ public class RecordService extends Service {
         int h = bitmap.getHeight();
         int s = w * h;
         int currentPix=0;
+
         for (int i = (int) (w*0.6); i<w*0.9; i++)
         {
-           for (int j = (int) (h*0.5); j<h*0.86; j++) {
+           for (int j = (int) (h*0.5); j<h*0.90; j++) {
                 currentPix = bitmap.getPixel(i,j);
-                if ((Math.abs(currentPix)<11769141+1000&&Math.abs(currentPix)>11769141-1000)
-                //        &&neighbors(bitmap,Math.abs(currentPix),new int[] {i,j})
-                )
+               int redPix = Color.red(currentPix);
+               int greenPix = Color.green(currentPix);
+               int bluePix = Color.blue(currentPix);
+               //System.out.println(bluePix);
+                if (testBronze(currentPix))
                 {
                     System.out.println(i);
                     System.out.println(j);
@@ -216,6 +234,15 @@ public class RecordService extends Service {
                         @Override
                         public void run() {
                             helper.click(locationClick[0], locationClick[1]);
+                            try {
+                                Thread.sleep(1200);
+                                helper.click(locationClick[0],locationClick[1]);
+                                Thread.sleep(500);
+                                helper.click(locationClick[0],locationClick[1]);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }).start();
 
@@ -241,7 +268,7 @@ public class RecordService extends Service {
 //                e.printStackTrace();
 //            }
 //        }
-
+argImageReader.close();
     }
 
     public class RecordBinder extends Binder {
