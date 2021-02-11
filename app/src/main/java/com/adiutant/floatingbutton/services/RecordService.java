@@ -199,7 +199,7 @@ public class RecordService extends Service {
 
         // 4.1 获取图片信息，转换成bitmap
         int width = argImageReader.getWidth();
-        int height = argImageReader.getHeight();
+        final int height = argImageReader.getHeight();
 
 
         final Image.Plane[] localPlanes = localImage.getPlanes();
@@ -234,15 +234,19 @@ public class RecordService extends Service {
                         @Override
                         public void run() {
                             helper.click(locationClick[0], locationClick[1]);
-                            try {
-                                Thread.sleep(1200);
-                                helper.click(locationClick[0],locationClick[1]);
-                                Thread.sleep(500);
-                                helper.click(locationClick[0],locationClick[1]);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
 
+                        }
+                    }).start();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            helper.click(locationClick[0], (int) (locationClick[1] - height * 0.2));
                         }
                     }).start();
 

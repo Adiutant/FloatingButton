@@ -130,7 +130,7 @@ public class FloatingService extends Service {
                 public void run() {
                     sendMessage(1);
                 }
-            },0,2000);
+            },0,1000);
         }
         isOn = !isOn;
         if (isOn) {
@@ -154,7 +154,7 @@ public class FloatingService extends Service {
                    view.getLocationOnScreen(location);
                    helper.click(location[0] + click.getRight() + 10,location[1] + click.getBottom() + 10);
                 }
-            },0,1000);
+            },0,1500);
         }
         isOn = !isOn;
         if (isOn) {
