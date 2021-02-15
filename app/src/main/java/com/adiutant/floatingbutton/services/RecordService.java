@@ -161,7 +161,7 @@ public class RecordService extends Service {
 
         for (int i = (int) (w*0.6); i<w*0.9; i++)
         {
-           for (int j = (int) (h*0.5); j<h*0.90; j++) {
+           for (int j = (int) (h*0.7); j<h*0.90; j++) {
                 currentPix = bitmap.getPixel(i,j);
                int redPix = Color.red(currentPix);
                int greenPix = Color.green(currentPix);
@@ -198,7 +198,7 @@ public class RecordService extends Service {
         Image localImage = argImageReader.acquireLatestImage();
 
         // 4.1 获取图片信息，转换成bitmap
-        int width = argImageReader.getWidth();
+        final int width = argImageReader.getWidth();
         final int height = argImageReader.getHeight();
 
 
@@ -238,7 +238,7 @@ public class RecordService extends Service {
                         }
                     }).start();
             try {
-                Thread.sleep(500);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -246,7 +246,8 @@ public class RecordService extends Service {
                     new Runnable() {
                         @Override
                         public void run() {
-                            helper.click(locationClick[0], (int) (locationClick[1] - height * 0.2));
+                            helper.click((int)(locationClick[0]+ width * 0.2), (int) (locationClick[1] - height * 0.5));
+                            helper.click((int)(locationClick[0]+ width * 0.2), (int) (locationClick[1] - height * 0.5));
                         }
                     }).start();
 
