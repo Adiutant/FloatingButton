@@ -144,7 +144,7 @@ public class RecordService extends Service {
        int bluePix = Color.blue(curPix);
        return redPix> 120&&greenPix>50&&greenPix<80&&bluePix>20&&bluePix<60;
    }
-    private boolean goldChect(int curPix)
+    private boolean goldChest(int curPix)
     {
         int redPix = Color.red(curPix);
         int greenPix = Color.green(curPix);
@@ -167,7 +167,7 @@ public class RecordService extends Service {
                int greenPix = Color.green(currentPix);
                int bluePix = Color.blue(currentPix);
                //System.out.println(bluePix);
-                if (testBronze(currentPix))
+                if (goldChest(currentPix))
                 {
                     System.out.println(i);
                     System.out.println(j);
@@ -180,7 +180,7 @@ public class RecordService extends Service {
     }
 
     private void initRecorder(ImageReader argImageReader) {
-
+        helper = new AutoServiceHelper();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
         String strDate = dateFormat.format(new java.util.Date());
         String pathImage = Environment.getExternalStorageDirectory().getPath()+"/Pictures/";

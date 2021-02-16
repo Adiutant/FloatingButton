@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-helper = new AutoServiceHelper();
+        helper = new AutoServiceHelper();
         projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
         setContentView(R.layout.activity_main);
         //checkPermission();
@@ -178,7 +178,7 @@ helper = new AutoServiceHelper();
         super.onDestroy();
         unbindService(connection);
         stopService(fintent);
-        helper.stopckick();
+       // helper.stopckick();
     }
 
 //    @Override
