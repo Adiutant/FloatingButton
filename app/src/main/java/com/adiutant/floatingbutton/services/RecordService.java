@@ -161,13 +161,13 @@ public class RecordService extends Service {
 
         for (int i = (int) (w*0.6); i<w*0.9; i++)
         {
-           for (int j = (int) (h*0.7); j<h*0.90; j++) {
+           for (int j = (int) (h*0.8); j<h*0.95; j++) {
                 currentPix = bitmap.getPixel(i,j);
                int redPix = Color.red(currentPix);
                int greenPix = Color.green(currentPix);
                int bluePix = Color.blue(currentPix);
                //System.out.println(bluePix);
-                if (goldChest(currentPix))
+                if (testBronze(currentPix))
                 {
                     System.out.println(i);
                     System.out.println(j);
@@ -234,11 +234,13 @@ public class RecordService extends Service {
                         @Override
                         public void run() {
                             helper.click(locationClick[0], locationClick[1]);
+                            helper.click(locationClick[0], locationClick[1]);
+
 
                         }
                     }).start();
             try {
-                Thread.sleep(2000);
+                Thread.sleep(400);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -246,7 +248,6 @@ public class RecordService extends Service {
                     new Runnable() {
                         @Override
                         public void run() {
-                            helper.click((int)(locationClick[0]+ width * 0.2), (int) (locationClick[1] - height * 0.5));
                             helper.click((int)(locationClick[0]+ width * 0.2), (int) (locationClick[1] - height * 0.5));
                         }
                     }).start();

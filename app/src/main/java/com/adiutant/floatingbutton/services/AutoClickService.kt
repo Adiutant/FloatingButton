@@ -36,7 +36,7 @@ class AutoClickService : AccessibilityService() {
         path.moveTo(x.toFloat(), y.toFloat())
         val builder = GestureDescription.Builder()
         val gestureDescription = builder
-                .addStroke(GestureDescription.StrokeDescription(path, 100, 100))
+                .addStroke(GestureDescription.StrokeDescription(path, 40, 40))
                 .build()
         dispatchGesture(gestureDescription, null, null)
     }

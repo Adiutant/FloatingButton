@@ -130,7 +130,7 @@ public class FloatingService extends Service {
                 public void run() {
                     sendMessage(1);
                 }
-            },0,2500);
+            },0,1000);
         }
         isOn = !isOn;
         if (isOn) {
