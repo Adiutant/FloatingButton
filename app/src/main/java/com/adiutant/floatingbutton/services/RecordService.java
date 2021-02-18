@@ -234,23 +234,27 @@ public class RecordService extends Service {
                         @Override
                         public void run() {
                             helper.click(locationClick[0], locationClick[1]);
-                            helper.click(locationClick[0], locationClick[1]);
+
 
 
                         }
                     }).start();
             try {
                 Thread.sleep(400);
+                new Thread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                helper.click((int)(locationClick[0]+ width * 0.2), (int) (locationClick[1] - height * 0.52));
+                                helper.click((int)(locationClick[0]+ width * 0.22), (int) (locationClick[1] - height * 0.5));
+                                helper.click((int)(locationClick[0]+ width * 0.23), (int) (locationClick[1] - height * 0.53));
+                                helper.click((int)(locationClick[0]+ width * 0.21), (int) (locationClick[1] - height * 0.51));
+                            }
+                        }).start();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            new Thread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            helper.click((int)(locationClick[0]+ width * 0.2), (int) (locationClick[1] - height * 0.5));
-                        }
-                    }).start();
+
 
         }
 //        if (localBitmap != null) {
